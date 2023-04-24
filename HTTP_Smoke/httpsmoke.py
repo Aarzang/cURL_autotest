@@ -13,7 +13,7 @@ except ImportError:
 
 buffer = BytesIO()
 c = pycurl.Curl()
-c.setopt(c.URL, 'http://localhost:1337')
+c.setopt(c.URL, 'http://localhost:1337/html')
 c.setopt(c.WRITEDATA, buffer)
 # For older PycURL versions:
 #c.setopt(c.WRITEFUNCTION, buffer.write)

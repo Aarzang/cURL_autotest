@@ -1,27 +1,30 @@
 
- 
-
-#! /usr/bin/env python
-# -*- coding: utf-8 -*-
-# vi:ts=4:et
-
+import os
 import pycurl
 try:
     from io import BytesIO
 except ImportError:
     from StringIO import StringIO as BytesIO
+separator = ' '
+if os.path.exists('serverdata.txt'):
+    datafile = open('serverdata.txt', 'rt')
+    server = datafile.readline()[:-1]
+    pages = datafile.readline()[:-1].split(separator)
+    datafile.close
+else:
+    print('Coud not find datafile, reverting to default')
+    server = 'http://locahost:1337'
+    pages = ['html', 'json', 'csv', 'interror', 'error404']
+print(server + '/' + pages[4])
+
 
 buffer = BytesIO()
 c = pycurl.Curl()
-c.setopt(c.URL, 'http://localhost:1337/html')
+c.setopt(c.URL, server + '/' + pages[4])
 c.setopt(c.WRITEDATA, buffer)
-# For older PycURL versions:
-#c.setopt(c.WRITEFUNCTION, buffer.write)
 c.perform()
 c.close()
 
 body = buffer.getvalue()
-# Body is a string on Python 2 and a byte string on Python 3.
-# If we know the encoding, we can always decode the body and
-# end up with a Unicode string.
+
 print(body.decode('iso-8859-1'))
